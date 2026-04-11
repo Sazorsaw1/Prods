@@ -1,42 +1,35 @@
+import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-import time
-import pytest
-
-options = webdriver.ChromeOptions()
-options.add_experimental_option("detach", True)
-
-driver = webdriver.Chrome(options=options)
-
-driver.get("https://www.selenium.dev/selenium/web/web-form.html")
-
-title = driver.title
-
-driver.implicitly_wait(0.5)
-
-# 1. Locate the dropdown element
-dropdown_element = driver.find_element(By.NAME, "my-select")
-
-# 2. Wrap it in a Select object
-select = Select(dropdown_element)
-
-# 3. Choose an option using one of three methods:
-select.select_by_visible_text("One")
 
 
-text_box = driver.find_element(by=By.NAME, value="my-text")
-submit_button = driver.find_element(by=By.CSS_SELECTOR, value="button")
+def main():
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("detach", True)
 
-text_box.send_keys("Selenium")
+    driver = webdriver.Chrome(options=options)
 
-time.sleep(5)
+    try:
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html")
+        driver.implicitly_wait(0.5)
 
-submit_button.click()
+        dropdown_element = driver.find_element(By.NAME, "my-select")
+        Select(dropdown_element).select_by_visible_text("One")
 
-message = driver.find_element(by=By.ID, value="message")
-text = message.text
+        text_box = driver.find_element(By.NAME, "my-text")
+        submit_button = driver.find_element(By.CSS_SELECTOR, "button")
 
-# driver.quit()
+        text_box.send_keys("Selenium")
+        time.sleep(5)
+        submit_button.click()
 
-print(text)
+        message = driver.find_element(By.ID, "message")
+        print(message.text)
+    finally:
+        driver.quit()
+
+
+if __name__ == "__main__":
+    main()
