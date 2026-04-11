@@ -11,10 +11,10 @@ The restaurant UI tests are organized under the `tests/` folder:
 - `tests/test_restaurant_check_order.py` covers check-order modal behavior and input validation.
 - `tests/conftest.py` contains the shared Selenium driver fixture and modal helpers.
 
-Legacy learning files are still present for reference, but they are no longer the active suite:
+Legacy Selenium learning work is still present for reference, but it is no longer the active suite:
 
 - `test_TestingRestaurantWebsite.py` now skips at module level.
-- `test_belejarselenium.py` only runs when executed directly, so VS Code test discovery will not open Chrome by itself.
+- `test_belejarselenium2.py` contains older practice tests against the Selenium demo web form.
 
 ## Run The Tests
 
