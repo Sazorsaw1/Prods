@@ -49,3 +49,4 @@ pytest -q --html=reports/e-restaurant-report.html --self-contained-html
 - Success paths that require a live backend order API are not part of this frontend-only suite yet.
 - VS Code test discovery is configured through `pytest.ini` to use the `tests/` folder.
 - `pytest-bdd` uses `tests/features` as the base directory for Gherkin feature files.
+- The website used for this testing is my other project "Restaurant Website"
