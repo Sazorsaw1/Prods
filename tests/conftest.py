@@ -1,6 +1,7 @@
 import os
 
 import pytest
+import pytest_html
 from pytest_bdd import given, parsers, then, when
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -126,6 +127,13 @@ def open_check_modal(driver, wait):
 
 def pytest_html_report_title(report):
     report.title = "E-Restaurant Frontend Automation Report"
+
+
+def pytest_bdd_after_scenario(request, feature, scenario):
+    driver = request.getfixturevalue("driver")
+    extras = request.getfixturevalue("extras")
+    screenshot = driver.get_screenshot_as_base64()
+    extras.append(pytest_html.extras.png(screenshot, name=f"{scenario.name} screenshot"))
 
 
 @given("the customer homepage is open")
@@ -321,11 +329,12 @@ def user_submits_order_without_selecting_table(driver):
     driver.find_element(By.ID, "submitOrder").click()
 
 
-@then("an alert asks for a table number")
-def alert_asks_for_table_number(driver, wait, timeout_seconds):
-    alert = wait(driver, timeout_seconds).until(EC.alert_is_present())
-    assert alert.text == "Please select a table number."
-    alert.accept()
+@then("an order form message asks for a table number")
+def order_form_message_asks_for_table_number(driver, wait, timeout_seconds):
+    message = wait(driver, timeout_seconds).until(
+        EC.visibility_of_element_located((By.ID, "orderFormMessage"))
+    )
+    assert message.text == "Please select a table number."
 
 
 @when("the user chooses Table 1")
@@ -338,11 +347,14 @@ def user_submits_order_without_selecting_menu_item(driver):
     driver.find_element(By.ID, "submitOrder").click()
 
 
-@then("an alert asks for at least one menu item")
-def alert_asks_for_at_least_one_menu_item(driver, wait, timeout_seconds):
-    alert = wait(driver, timeout_seconds).until(EC.alert_is_present())
-    assert alert.text == "Please select at least one menu item."
-    alert.accept()
+@then("an order form message asks for at least one menu item")
+def order_form_message_asks_for_at_least_one_menu_item(
+    driver, wait, timeout_seconds
+):
+    message = wait(driver, timeout_seconds).until(
+        EC.visibility_of_element_located((By.ID, "orderFormMessage"))
+    )
+    assert message.text == "Please select at least one menu item."
 
 
 @when("the user selects the first available order item")
@@ -427,11 +439,12 @@ def user_checks_an_empty_order_id(driver):
     driver.find_element(By.ID, "checkOrderBtn").click()
 
 
-@then("an alert asks for an order ID")
-def alert_asks_for_an_order_id(driver, wait, timeout_seconds):
-    alert = wait(driver, timeout_seconds).until(EC.alert_is_present())
-    assert alert.text == "Please enter an Order ID"
-    alert.accept()
+@then("a check order message asks for an order ID")
+def check_order_message_asks_for_an_order_id(driver, wait, timeout_seconds):
+    message = wait(driver, timeout_seconds).until(
+        EC.visibility_of_element_located((By.ID, "checkOrderMessage"))
+    )
+    assert message.text == "Please enter an Order ID."
 
 
 @when(parsers.parse('the user enters "{order_id}" as the order ID'))
@@ -446,8 +459,11 @@ def user_checks_the_order_status(driver):
     driver.find_element(By.ID, "checkOrderBtn").click()
 
 
-@then("an alert asks for the 6 digit order number")
-def alert_asks_for_the_6_digit_order_number(driver, wait, timeout_seconds):
-    alert = wait(driver, timeout_seconds).until(EC.alert_is_present())
-    assert alert.text == "Please enter the 6-digit number from your Order ID."
-    alert.accept()
+@then("a check order message asks for the 6 digit order number")
+def check_order_message_asks_for_the_6_digit_order_number(
+    driver, wait, timeout_seconds
+):
+    message = wait(driver, timeout_seconds).until(
+        EC.visibility_of_element_located((By.ID, "checkOrderMessage"))
+    )
+    assert message.text == "Please enter the 6-digit number from your Order ID."

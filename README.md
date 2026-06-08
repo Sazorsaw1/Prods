@@ -37,6 +37,9 @@ To generate an HTML report:
 pytest -q --html=reports/e-restaurant-report.html --self-contained-html
 ```
 
+The HTML report is generated automatically for normal pytest runs and embeds
+one browser screenshot for every scenario, whether the scenario passes or fails.
+
 ## Useful Environment Variables
 
 - `RESTAURANT_BASE_URL` overrides the deployed site URL.

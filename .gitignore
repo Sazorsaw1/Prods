@@ -208,3 +208,7 @@ __marimo__/
 
 # Selenium local runtime artifacts
 .selenium-tmp/
+.selenium-runtime/
+
+# Local pytest-html reports
+reports/

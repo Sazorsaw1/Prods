@@ -8,18 +8,18 @@ Feature: Create order modal
     When the user closes the create order modal
     Then the create order modal is closed
 
-  Scenario: Submitting without a table shows an alert
+  Scenario: Submitting without a table shows a validation message
     Given the customer homepage is open
     When the user opens the create order modal
     And the user submits the order without selecting a table
-    Then an alert asks for a table number
+    Then an order form message asks for a table number
 
-  Scenario: Submitting without a menu item shows an alert
+  Scenario: Submitting without a menu item shows a validation message
     Given the customer homepage is open
     When the user opens the create order modal
     And the user chooses Table 1
     And the user submits the order without selecting a menu item
-    Then an alert asks for at least one menu item
+    Then an order form message asks for at least one menu item
 
   Scenario: Selecting an item and increasing quantity updates the total
     Given the customer homepage is open
