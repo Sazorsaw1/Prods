@@ -1,0 +1,61 @@
+name: Selenium CI
+
+on:
+  pull_request:
+    branches:
+      - developments
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: selenium-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  restaurant-ui-tests:
+    name: Restaurant UI Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      SELENIUM_HEADLESS: "1"
+      RESTAURANT_BASE_URL: "https://restaurant-website-ten-bice.vercel.app/"
+      RESTAURANT_UI_TIMEOUT: "20"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Show browser versions
+        run: |
+          google-chrome --version || chromium --version || true
+          chromedriver --version || true
+
+      - name: Create report directory
+        run: mkdir -p reports
+
+      - name: Run restaurant Selenium tests
+        run: python -m pytest -q
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e-restaurant-test-report-${{ github.run_number }}
+          path: reports/e-restaurant-report.html
+          if-no-files-found: warn
+          retention-days: 14
