@@ -40,6 +40,15 @@ pytest -q --html=reports/e-restaurant-report.html --self-contained-html
 The HTML report is generated automatically for normal pytest runs and embeds
 one browser screenshot for every scenario, whether the scenario passes or fails.
 
+## Continuous Integration
+
+GitHub Actions runs the complete headless Selenium suite for pull requests that
+target `developments` or `main`. The workflow can also be started manually from
+the repository's Actions tab.
+
+Each run uploads the self-contained HTML report, including all scenario
+screenshots, as a workflow artifact retained for 14 days.
+
 ## Useful Environment Variables
 
 - `RESTAURANT_BASE_URL` overrides the deployed site URL.
